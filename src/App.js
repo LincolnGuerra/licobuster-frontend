@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import './App.css';
 import './styles/App.scss';
 
 import Hero from './components/Hero';
@@ -6,8 +7,31 @@ import Rating from './components/Rating';
 import DecorativeTicket from './components/DecorativeTicket';
 import ScatteredLogo from './components/ScatteredLogo';
 
-const App = () => {
-  // Define 5 posições base (grade implícita) com deslocamento aleatório
+function App() {
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/api/auth/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: 'testuser', password: 'testpass' }), // Dados de teste
+        });
+        if (!response.ok) throw new Error('Resposta da rede não foi ok');
+        const data = await response.json();
+        console.log('Dados recebidos:', data);
+      } catch (error) {
+        console.error('Erro na requisição:', error.message);
+      }
+    };
+
+    fetchData();
+  }, [apiUrl]);
+
+  // Gera 5 posições base com deslocamento aleatório
   const basePositions = [
     { x: 10, y: 10 },  // Canto superior esquerdo
     { x: 70, y: 10 },  // Canto superior direito
@@ -18,8 +42,8 @@ const App = () => {
 
   const floatingTickets = basePositions.map((pos, index) => ({
     id: index,
-    top: `${pos.y + (Math.random() * 10 - 5)}vh`, // Deslocamento aleatório de -5 a +5 vh
-    left: `${pos.x + (Math.random() * 10 - 5)}vw`, // Deslocamento aleatório de -5 a +5 vw
+    top: `${pos.y + (Math.random() * 10 - 5)}vh`,
+    left: `${pos.x + (Math.random() * 10 - 5)}vw`,
   }));
 
   return (
@@ -62,6 +86,6 @@ const App = () => {
       <DecorativeTicket />
     </div>
   );
-};
+}
 
 export default App;
