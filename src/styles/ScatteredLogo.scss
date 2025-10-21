@@ -1,0 +1,25 @@
+@use './variables' as v;
+@use 'sass:math';
+
+.scattered-ticket {
+  position: absolute;
+  width: 500px; // Aumenta 100px (de 400 para 500)
+  height: 350px; // Aumenta 100px (de 250 para 350)
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: -1;
+  animation: pulse 8s infinite ease-in-out;
+  transform-origin: center;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1) rotate(var(--rotation));
+  }
+  50% {
+    transform: scale(1.08) rotate(var(--rotation));
+  }
+  100% {
+    transform: scale(1) rotate(var(--rotation));
+  }
+}

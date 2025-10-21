@@ -1,0 +1,11 @@
+@use './variables' as v;
+
+.decorative-ticket {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 200px;
+  opacity: 0.7;
+  transform: rotate(-10deg);
+  pointer-events: none;
+}

@@ -1,0 +1,55 @@
+@use './variables' as v;
+@use 'sass:color'; // Importa o módulo de cores
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: v.$azul-escuro;
+  color: v.$branco;
+  overflow-x: hidden;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden; // Evita barras de rolagem indesejadas
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: color.adjust(v.$azul-escuro, $lightness: -10%); // Agora funciona!
+  border-bottom: 2px solid v.$amarelo;
+
+  .logo {
+    height: 60px;
+    width: auto;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+
+    li {
+      cursor: pointer;
+      &:hover {
+        color: v.$amarelo;
+      }
+    }
+  }
+}
+
+.rating-section {
+  padding: 2rem;
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: v.$azul-escuro;
+  border-top: 1px solid v.$amarelo;
+}
