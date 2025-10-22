@@ -2,19 +2,22 @@
 @use 'sass:math';
 
 .scattered-ticket {
-  position: absolute;
-  width: 500px; // Mantido
-  height: 350px; // Mantido
+  position: fixed;
+  width: 500px;
+  height: 350px;
   opacity: 0.15 !important;
   transition: opacity 0.3s ease-in-out;
-  will-change: opacity;
+  will-change: transform, opacity;
   pointer-events: none;
-  // ALTERAÇÃO: Alterado z-index para 1 para ficar acima do fundo do .app, mas atrás do conteúdo
-  z-index: 1; // Fica entre o fundo (.app) e o conteúdo (header, main, footer)
+  z-index: 1;
   animation: pulse 8s infinite ease-in-out;
   transform-origin: center;
-  top: clamp(0%, var(--top), 100%); // Mantém tickets dentro da viewport
-  left: clamp(0%, var(--left), 100%);
+  transform: rotate(var(--rotation));
+  
+  // Garantir que os tickets não saiam da viewport
+  &:hover {
+    opacity: 0.25 !important;
+  }
 }
 
 @keyframes pulse {

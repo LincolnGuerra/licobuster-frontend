@@ -1,0 +1,118 @@
+@use './variables' as v;
+
+.carousel-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.poster {
+  padding: 0 12px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 0 8px;
+  }
+
+  .poster-card {
+    background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    @media (max-width: 1440px) {
+      width: 180px;
+      height: 270px;
+    }
+
+    @media (max-width: 1024px) {
+      width: 160px;
+      height: 240px;
+    }
+
+    @media (max-width: 768px) {
+      width: 130px;
+      height: 195px;
+    }
+
+    @media (max-width: 480px) {
+      width: 110px;
+      height: 165px;
+    }
+  }
+
+  &:not(:hover) img {
+    transform: none;
+  }
+
+  img:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.7);
+
+    @media (hover: none) {
+      transform: none;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+    }
+  }
+
+  .caption {
+    margin-top: 12px;
+    color: v.$branco;
+    font-size: 16px;
+    text-align: center;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px;
+    box-sizing: border-box;
+
+    @media (max-width: 1440px) {
+      width: 180px;
+      font-size: 15px;
+    }
+
+    @media (max-width: 1024px) {
+      width: 160px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      width: 130px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 480px) {
+      width: 110px;
+      font-size: 11px;
+      margin-top: 6px;
+    }
+  }
+}
+
+// Visual geral da seção (fundo escuro similar à referência)
+.recent-section {
+  padding: 12px 0 28px; // espaço para título e bullets
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+}
+
+.recent-section h2 {
+  margin: 0 0 8px 8px;
+  color: v.$amarelo;
+  font-size: 2rem;
+  font-weight: 600;
+}

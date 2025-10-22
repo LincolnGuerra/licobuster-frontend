@@ -3,36 +3,34 @@
 
 html, body {
   margin: 0;
-  padding: 0; // Remove qualquer padding padrão
-  height: 100%; // Garante que body/html ocupem a tela inteira
+  padding: 0;
+  height: 100%;
   font-family: Arial, sans-serif;
   color: v.$branco;
-  overflow: hidden; // Evita rolagem vertical e horizontal no body
-  background: transparent; // Fundo transparente
+  background: transparent;
+  scroll-behavior: smooth; // Rolagem suave
 }
 
 .app {
   position: relative;
-  height: 100vh; // Exatamente a altura da tela
-  min-height: 100vh; // Mantido para compatibilidade
-  overflow: hidden; // Evita barras de rolagem indesejadas
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: v.$azul-escuro; // Fundo azul no container principal
-  // ALTERAÇÃO: Adicionado fundo repetitivo com logoallpage.png
-  z-index: 0; // Camada base
+  background-color: v.$azul-escuro;
+  z-index: 0;
+  overflow-x: hidden; // Previne rolagem horizontal
+  overflow-y: auto; // Permite rolagem vertical quando necessário
 
-  // Mover a imagem de fundo para um pseudo-elemento para controlar opacidade
   // &::before {
   //   content: "";
   //   position: absolute;
-  //   inset: 0; // top:0; right:0; bottom:0; left:0;
-  //   background-image: url('../assets/logoallpage.png'); // Imagem repetitiva
+  //   inset: 0;
+  //   background-image: url('../assets/logoallpage.png');
   //   background-repeat: repeat;
   //   background-size: 400px;
-  //   opacity: 0.3; // ajuste fino da opacidade do fundo
-  //   z-index: 0; // fica atrás do conteúdo, mas acima do background-color da .app
-  //   pointer-events: none; // não interfere na interação
+  //   opacity: 0.3;
+  //   z-index: 0;
+  //   pointer-events: none;
   // }
 }
 
@@ -44,7 +42,7 @@ html, body {
   background-color: color.adjust(v.$azul-escuro, $lightness: -10%);
   border-bottom: 2px solid v.$amarelo;
   flex-shrink: 0;
-  z-index: 2; // Acima do fundo
+  z-index: 2;
 
   .logo {
     height: 60px;
@@ -66,12 +64,12 @@ html, body {
 }
 
 main {
-  flex: 1; // Ocupa o espaço disponível entre header e footer
-  overflow-y: auto; // Permite scroll interno se o conteúdo crescer
+  flex: 1 0 auto; // flex-grow: 1, flex-shrink: 0, flex-basis: auto
   display: flex;
   flex-direction: column;
-  gap: 2rem; // Espaço entre Hero e rating-section
-  z-index: 2; // Acima do fundo
+  gap: 2rem;
+  z-index: 2;
+  padding-bottom: 2rem; // Espaço extra antes do footer
 }
 
 .rating-section {
@@ -81,10 +79,81 @@ main {
 }
 
 footer {
+  flex-shrink: 0; // Impede que o footer encolha
+  width: 100%;
   text-align: center;
   padding: 1rem;
   background-color: v.$azul-escuro;
   border-top: 1px solid v.$amarelo;
-  flex-shrink: 0;
-  z-index: 2; // Acima do fundo
+  z-index: 2;
+  margin-top: auto; // Empurra o footer para o final do container flex
+}
+
+// Estilos base para todas as seções com carrossel
+%carousel-section-base {
+  padding: 2rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.8rem;
+    color: v.$amarelo;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.3rem;
+    }
+  }
+
+  .carousel-container {
+    width: 900px;
+    max-width: 100%;
+    margin: 0 auto;
+    
+    @media (max-width: 1024px) {
+      width: 100%;
+    }
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 0;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+  }
+}
+
+// Aplicando os estilos base para cada seção
+.recent-section, .topfilmes, .topseries {
+  @extend %carousel-section-base;
+  padding: 12px 0 28px; // espaço para título e bullets
+  background: rgba(0,0,0,0.25); // fundo escuro semi-transparente
+  margin: 0 0 2rem; // removida margem lateral, mantida margem inferior
+  width: 100vw; // largura total da viewport
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  
+  // Container interno para manter o conteúdo centralizado
+  .carousel-container {
+    padding: 0 1rem;
+  }
+}
+
+.sec-rating {
+  @extend %carousel-section-base;
 }

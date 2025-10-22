@@ -1,20 +1,176 @@
-@use './variables' as v;
+@use './variables' as v; // Assumindo que variáveis existem
 
 .hero {
-  height: 100vh;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: v.$branco;
+  gap: 2rem;
+  padding: 4rem 1rem 6rem; // mais espaço para o texto e bullets
   text-align: center;
+  background-size: 80%; // Reduzindo o zoom da imagem
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
+
+  // overlay / vignette
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at center, rgba(13,20,51,0.3) 0%, rgba(13,20,51,0.4) 30%, rgba(13,20,51,0.9) 70%, rgba(13,20,51,0.98) 100%),
+      linear-gradient(90deg, rgba(13,20,51,0.98) 0%, rgba(13,20,51,0.3) 25%, rgba(13,20,51,0.3) 75%, rgba(13,20,51,0.98) 100%),
+      linear-gradient(180deg, rgba(13,20,51,0.6) 0%, rgba(13,20,51,0.85) 50%, rgba(13,20,51,0.98) 100%);
+    z-index: 0;
+  }
 
   h1 {
     font-size: 3rem;
-    color: v.$amarelo;
+    color: v.$branco;
+    font-family: 'Impact', serif;
+    z-index: 1;
+    line-height: 1.05;
+    font-weight: 700;
+    text-shadow: 0 6px 18px rgba(0,0,0,0.7);
+    max-width: 900px;
   }
 
   p {
-    font-size: 1.5rem;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.9);
+    z-index: 1;
+    max-width: 760px;
+  }
+
+  // ALTERAÇÃO: Estilos para botões pílulas com mais destaque
+  .pills-container {
+    display: flex;
+    gap: 1.5rem; // Aumentado espaço entre botões
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 3; // Traz para frente de tudo
+    margin: 1rem 0 2rem; // Mais espaço vertical
+  }
+
+  .pill-button {
+    padding: 0.8rem 2rem; // Botões maiores
+    border-radius: 50px;
+    background-color: v.$amarelo;
+    color: v.$azul-escuro;
+    font-family: 'Impact', sans-serif;
+    font-size: 1.2rem; // Fonte maior
+    font-weight: 800; // Mais negrito
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3); // Sombra para destaque
+    text-transform: uppercase; // Deixa tudo maiúsculo
+    letter-spacing: 2.5px; // Espaçamento entre letras
+
+    &:hover {
+      background-color: lighten(v.$amarelo, 10%);
+      transform: translateY(-2px); // Leve movimento para cima
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4); // Sombra maior no hover
+    }
+
+    &:active {
+      transform: translateY(1px); // Efeito de pressionar
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+  }
+
+  // ALTERAÇÃO: Estilos para carrossel
+  .carousel-container {
+    width: 900px;
+    max-width: 100%; // Responsivo
+    margin: 0 auto;
+    position: relative;
+    z-index: 1; // acima do overlay
+  }
+
+  // Mostrar as imagens do slider como posters acima do background
+  .hero-slide {
+    padding: 0 10px;
+    
+    img {
+      visibility: visible;
+      display: block;
+      width: 280px; // Aumentado o tamanho
+      height: 420px; // Mantém proporção do poster
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      z-index: 2;
+      transition: all 0.3s ease;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    &:not(.slick-current) img {
+      transform: scale(0.85);
+      opacity: 0.7;
+    }
+
+    &.slick-current img {
+      transform: scale(1);
+      opacity: 1;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.75);
+    }
+
+    img:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+  }
+
+  // Ajustes no container do carrossel
+  .carousel-container {
+    width: 900px;
+    max-width: 100%;
+    padding: 20px 0;
+    margin: 2rem auto 0;
+    
+    .slick-list {
+      margin: 0 -10px; // compensa o padding dos slides
+    }
+  }
+
+  // Customização dos bullets do carrossel
+  .slick-dots.hero-dots {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    z-index: 1;
+    display: flex !important;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li {
+      margin: 0;
+      width: auto;
+      height: auto;
+
+      button {
+        width: 8px;
+        height: 8px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background-color: v.$azul-escuro;
+        transition: all 0.3s ease;
+
+        &:before {
+          display: none; // Remove o caractere padrão do Slick
+        }
+      }
+
+      &.slick-active button {
+        background-color: v.$amarelo;
+        transform: scale(1.2);
+      }
+    }
   }
 }
