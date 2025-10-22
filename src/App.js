@@ -18,7 +18,7 @@ function App() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: 'testuser', password: 'testpass' }), // Dados de teste
+          body: JSON.stringify({ username: 'testuser', password: 'testpass' }),
         });
         if (!response.ok) throw new Error('Resposta da rede não foi ok');
         const data = await response.json();
@@ -31,19 +31,23 @@ function App() {
     fetchData();
   }, [apiUrl]);
 
-  // Gera 5 posições base com deslocamento aleatório
+  // ALTERAÇÃO: Confirmado 2 tickets flutuantes com posições ajustadas
   const basePositions = [
-    { x: 10, y: 10 },  // Canto superior esquerdo
-    { x: 70, y: 10 },  // Canto superior direito
-    { x: 10, y: 50 },  // Meio esquerdo
-    { x: 70, y: 50 },  // Meio direito
-    { x: 40, y: 80 },  // Canto inferior central
+    { x: 5, y: 15 }, // Topo-esquerda
+    { x: 55, y: 15 }, // Topo-direita
+    { x: 35, y: 25 }, // Topo-direita
+
+    { x: 5, y: 55 }, // Baixo-esquerda
+    { x: 55, y: 55 }, // Baixo-direita
   ];
 
   const floatingTickets = basePositions.map((pos, index) => ({
     id: index,
     top: `${pos.y + (Math.random() * 10 - 5)}vh`,
+    right: `${pos.y + (Math.random() * 10 - 5)}vh`,
+    center: `${pos.y + (Math.random() * 10 - 5)}vh`,
     left: `${pos.x + (Math.random() * 10 - 5)}vw`,
+    bottom: `${pos.y + (Math.random() * 10 - 5)}vh`,
   }));
 
   return (
@@ -63,18 +67,18 @@ function App() {
         </nav>
       </header>
 
-      <Hero />
-
-      <section className="rating-section">
-        <h2>Avalie seus Filmes e Séries Favoritos</h2>
-        <Rating />
-      </section>
+      <main>
+        <Hero />
+        <section className="rating-section">
+          <h2>Avalie seus Filmes e Séries Favoritos</h2>
+          <Rating />
+        </section>
+      </main>
 
       <footer>
         <p>&copy; 2025 LicoBuster Rating. Todos os direitos reservados.</p>
       </footer>
 
-      {/* TICKETS FLUTUANTES NO FUNDO */}
       {floatingTickets.map((ticket) => (
         <ScatteredLogo
           key={ticket.id}

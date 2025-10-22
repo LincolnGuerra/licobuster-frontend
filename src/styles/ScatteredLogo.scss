@@ -3,13 +3,18 @@
 
 .scattered-ticket {
   position: absolute;
-  width: 500px; // Aumenta 100px (de 400 para 500)
-  height: 350px; // Aumenta 100px (de 250 para 350)
-  opacity: 0.15;
+  width: 500px; // Mantido
+  height: 350px; // Mantido
+  opacity: 0.15 !important;
+  transition: opacity 0.3s ease-in-out;
+  will-change: opacity;
   pointer-events: none;
-  z-index: -1;
+  // ALTERAÇÃO: Alterado z-index para 1 para ficar acima do fundo do .app, mas atrás do conteúdo
+  z-index: 1; // Fica entre o fundo (.app) e o conteúdo (header, main, footer)
   animation: pulse 8s infinite ease-in-out;
   transform-origin: center;
+  top: clamp(0%, var(--top), 100%); // Mantém tickets dentro da viewport
+  left: clamp(0%, var(--left), 100%);
 }
 
 @keyframes pulse {

@@ -1,18 +1,39 @@
 @use './variables' as v;
 @use 'sass:color'; // Importa o módulo de cores
 
-body {
+html, body {
   margin: 0;
+  padding: 0; // Remove qualquer padding padrão
+  height: 100%; // Garante que body/html ocupem a tela inteira
   font-family: Arial, sans-serif;
-  background-color: v.$azul-escuro;
   color: v.$branco;
-  overflow-x: hidden;
+  overflow: hidden; // Evita rolagem vertical e horizontal no body
+  background: transparent; // Fundo transparente
 }
 
 .app {
   position: relative;
-  min-height: 100vh;
+  height: 100vh; // Exatamente a altura da tela
+  min-height: 100vh; // Mantido para compatibilidade
   overflow: hidden; // Evita barras de rolagem indesejadas
+  display: flex;
+  flex-direction: column;
+  background-color: v.$azul-escuro; // Fundo azul no container principal
+  // ALTERAÇÃO: Adicionado fundo repetitivo com logoallpage.png
+  z-index: 0; // Camada base
+
+  // Mover a imagem de fundo para um pseudo-elemento para controlar opacidade
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   inset: 0; // top:0; right:0; bottom:0; left:0;
+  //   background-image: url('../assets/logoallpage.png'); // Imagem repetitiva
+  //   background-repeat: repeat;
+  //   background-size: 400px;
+  //   opacity: 0.3; // ajuste fino da opacidade do fundo
+  //   z-index: 0; // fica atrás do conteúdo, mas acima do background-color da .app
+  //   pointer-events: none; // não interfere na interação
+  // }
 }
 
 .header {
@@ -20,8 +41,10 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: color.adjust(v.$azul-escuro, $lightness: -10%); // Agora funciona!
+  background-color: color.adjust(v.$azul-escuro, $lightness: -10%);
   border-bottom: 2px solid v.$amarelo;
+  flex-shrink: 0;
+  z-index: 2; // Acima do fundo
 
   .logo {
     height: 60px;
@@ -42,9 +65,19 @@ body {
   }
 }
 
+main {
+  flex: 1; // Ocupa o espaço disponível entre header e footer
+  overflow-y: auto; // Permite scroll interno se o conteúdo crescer
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; // Espaço entre Hero e rating-section
+  z-index: 2; // Acima do fundo
+}
+
 .rating-section {
   padding: 2rem;
   text-align: center;
+  flex-shrink: 0;
 }
 
 footer {
@@ -52,4 +85,6 @@ footer {
   padding: 1rem;
   background-color: v.$azul-escuro;
   border-top: 1px solid v.$amarelo;
+  flex-shrink: 0;
+  z-index: 2; // Acima do fundo
 }
