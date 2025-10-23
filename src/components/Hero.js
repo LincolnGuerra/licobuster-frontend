@@ -1,18 +1,36 @@
-import React, { useState } from 'react';
-import '../styles/Hero.scss'; // Estilos SASS para Hero
-// ALTERAÇÃO: Importado React Slick para carrossel
+import React, { useState, useEffect } from 'react';
+import '../styles/Hero.scss';
 import Slider from 'react-slick';
+import { getPopularMovies } from '../services/tmdbAPI';
 
 const Hero = () => {
-  // slides data - usando as imagens existentes no projeto
-  const slides = [
-    { src: require('../assets/uma-batalha-apos-a-outra.jpg'), alt: 'Uma Batalha Após a Outra' },
-    { src: require('../assets/filme2.jpg'), alt: 'Filme 2' },
-    { src: require('../assets/filme3.jpg'), alt: 'Filme 3' },
-    { src: require('../assets/filme4.jpg'), alt: 'Filme 4' }
-  ];
-
+  const [popularMovies, setPopularMovies] = useState([]);
   const [active, setActive] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Buscar filmes populares para o Hero
+  useEffect(() => {
+    const fetchHeroMovies = async () => {
+      try {
+        const movies = await getPopularMovies();
+        setPopularMovies(movies.slice(0, 4)); // Pegar apenas 4 filmes para o Hero
+        setLoading(false);
+      } catch (error) {
+        console.error('Erro ao buscar filmes para o Hero:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchHeroMovies();
+  }, []);
+
+  // Função para construir URL da imagem
+  const getImageUrl = (path, size = 'w500') => {
+    if (!path) {
+      return require('../assets/uma-batalha-apos-a-outra.jpg');
+    }
+    return `https://image.tmdb.org/t/p/${size}${path}`;
+  };
 
   // Config para carrossel Hero (com bullets)
   const heroCarouselSettings = {
@@ -26,7 +44,6 @@ const Hero = () => {
     focusOnSelect: true,
     afterChange: (i) => setActive(i),
     dotsClass: "slick-dots hero-dots",
-    // Customize os bullets para mostrar apenas um por filme
     customPaging: (i) => (
       <button
         aria-label={`Ir para slide ${i + 1}`}
@@ -44,28 +61,48 @@ const Hero = () => {
     ]
   };
 
+  // Se ainda está carregando, mostrar um placeholder
+  if (loading) {
+    return (
+      <section className="hero loading">
+        <div className="loading-hero">
+          <div className="loading-spinner"></div>
+          <p>Carregando...</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       className="hero"
       style={{
-        backgroundImage: `url(${slides[active].src})`,
+        backgroundImage: popularMovies[active]?.poster_path 
+          ? `url(${getImageUrl(popularMovies[active].poster_path, 'w1280')})`
+          : `url(${require('../assets/uma-batalha-apos-a-outra.jpg')})`
       }}
     >
       <h1>Bem-vindo ao LicoBuster Rating!</h1>
-      <p>Avalie filmes e séries com estilo — como um verdadeiro crítico de licor!</p> {/* Corrigido "cerveja" para "licor" conforme tema */}
-      {/* ALTERAÇÃO: Adicionada sub-section para botões pílulas */}
+      <p>Avalie filmes e séries com estilo — como um verdadeiro crítico de licor!</p>
+      
       <div className="pills-container">
         <button className="pill-button">Recomenda</button>
         <button className="pill-button">Filmes</button>
         <button className="pill-button">Séries</button>
         <button className="pill-button">Bullcrap</button>
       </div>
-      {/* ALTERAÇÃO: Adicionado carrossel simples com 4 imagens */}
+
       <div className="carousel-container">
         <Slider {...heroCarouselSettings}>
-          {slides.map((s, idx) => (
-            <div key={idx} className="hero-slide">
-              <img src={s.src} alt={s.alt} />
+          {popularMovies.map((movie, idx) => (
+            <div key={movie.id} className="hero-slide">
+              <img 
+                src={getImageUrl(movie.poster_path)} 
+                alt={movie.title || 'Filme sem título'}
+                onError={(e) => {
+                  e.target.src = require('../assets/uma-batalha-apos-a-outra.jpg');
+                }}
+              />
             </div>
           ))}
         </Slider>
